@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missão Hino da Escola</title>
+  <style>
+    :root {
+      --bg1: #061b3a;
+      --bg2: #123d7a;
+      --gold: #ffd56a;
+      --gold-dark: #b57918;
+      --text: #fff7df;
+      --green: #33d680;
+      --red: #ff6868;
+      --card: rgba(255, 255, 255, 0.09);
+      --border: rgba(255, 213, 106, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 213, 106, 0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(41, 124, 255, 0.20), transparent 35%),
+        linear-gradient(180deg, var(--bg2), var(--bg1) 55%, #020712);
+      color: var(--text);
+    }
+
+    .wrap {
+      max-width: 1050px;
+      margin: auto;
+      padding: 26px;
+    }
+
+    .card {
+      min-height: 470px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+
+    .logo {
+      width: 115px;
+      height: 115px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 14px;
+      filter: drop-shadow(0 0 16px rgba(255,213,106,0.65));
+      border-radius: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      text-align: center;
+      color: var(--gold);
+      font-size: clamp(34px, 5vw, 52px);
+      text-shadow: 0 0 18px rgba(255,213,106,0.35);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--gold);
+      font-size: 30px;
+    }
+
+    .sub {
+      font-size: 20px;
+      line-height: 1.5;
+      opacity: 0.92;
+    }
+
+    input {
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,213,106,0.45);
+      background: rgba(255,255,255,0.12);
+      color: white;
+      font-size: 20px;
+      margin: 10px 0 18px;
+    }
+
+    input::placeholder {
+      color: rgba(255,255,255,0.65);
+    }
+
+    button,
+    .btnlink {
+      border: 0;
+      border-radius: 18px;
+      padding: 15px 20px;
+      margin: 8px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #1d1200;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button:hover,
+    .btnlink:hover {
+      transform: translateY(-2px);
+    }
+
+    .opcao {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    .opcao.certa {
+      background: rgba(51,214,128,0.25);
+      border-color: var(--green);
+    }
+
+    .opcao.errada {
+      background: rgba(255,69,69,0.25);
+      border-color: var(--red);
+    }
+
+    .topbar {
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+
+    .verso {
+      font-size: clamp(24px, 4vw, 32px);
+      line-height: 1.45;
+      background: rgba(0,0,0,0.22);
+      border-left: 5px solid var(--gold);
+      padding: 20px;
+      border-radius: 18px;
+      margin: 16px 0;
+    }
+
+    .linha {
+      padding: 14px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 16px;
+      cursor: pointer;
+      user-select: none;
+      margin: 8px 0;
+      font-size: 20px;
+    }
+
+    .linha.sel {
+      outline: 3px solid var(--gold);
+      background: rgba(255,213,106,0.18);
+    }
+
+    .bad {
+      color: #ff9c9c;
+      font-weight: bold;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .small {
+      font-size: 15px;
+      opacity: 0.78;
+      text-align: center;
+    }
+
+    .rank {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 18px;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .rank th,
+    .rank td {
+      padding: 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      text-align: left;
+    }
+
+    .rank th {
+      color: var(--gold);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .medalha {
+      font-size: 24px;
+    }
+
+    footer {
+      text-align: center;
+      opacity: 0.8;
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" id="app"></div>
+
+    <footer>
+      <a class="btnlink" href="../../">⬅ Voltar ao Portal</a><br />
+      Escola Municipal Marciano Maciel da Silva • Ibiporanga • Tanabi/SP
+    </footer>
+  </div>
+
+  <script>
+    let pontos = 0;
+    let aluno = "";
+
+    const app = document.getElementById("app");
+    const STORAGE_KEY = "ranking_hino_marciano_top5";
+
+    const ordemCorreta = [
+      "Salve, Escola bendita",
+      "de Ibiporanga bela",
+      "Salve, a terra bonita",
+      "que esse nome revela"
+    ];
+
+    let ordemEscolhida = [];
+
+    function getRanking() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function setRanking(lista) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lista.slice(0, 5)));
+    }
+
+    function salvarRanking(nome, pontuacao) {
+      const lista = getRanking();
+
+      lista.push({
+        nome: nome,
+        pontos: pontuacao,
+        data: new Date().toLocaleDateString("pt-BR")
+      });
+
+      lista.sort((a, b) => b.pontos - a.pontos);
+      setRanking(lista);
+    }
+
+    function medalha(indice) {
+      if (indice === 0) return "🥇";
+      if (indice === 1) return "🥈";
+      if (indice === 2) return "🥉";
+      return "⭐";
+    }
+
+    function cabecalhoInterno() {
+      return '<img class="logo" src="../../assets/img/logo-marciano-maker.png" alt="Logo Marciano Maker">';
+    }
+
+    function telaInicio() {
+      app.innerHTML = `
+        ${cabecalhoInterno()}
+        <h1>Missão Hino da Escola</h1>
+        <p class="sub" style="text-align:center">
+          Um jogo rápido para aprender e valorizar o Hino da Escola Municipal Marciano Maciel da Silva.
+        </p>
+
+        <label class="sub" for="nomeAluno">Digite o nome do aluno:</label>
+        <input id="nomeAluno" placeholder="Exemplo: Maria Eduarda" maxlength="30" />
+
+        <div class="actions">
+          <button onclick="iniciar()">Começar missão</button>
+          <button onclick="telaRanking()">Ver Top 5</button>
+        </div>
+
+        <p class="small">O ranking fica salvo neste computador/navegador.</p>
+      `;
+    }
+
+    function iniciar() {
+      const campo = document.getElementById("nomeAluno");
+      const nome = campo.value.trim();
+
+      if (!nome) {
+        alert("Digite o nome do aluno para começar.");
+        campo.focus();
+        return;
+      }
+
+      aluno = nome;
+      pontos = 0;
+      fase1();
+    }
+
+    function barra(nomeDaFase) {
+      return `
+        <div class="topbar">
+          <div class="pill">${nomeDaFase}</div>
+          <div class="pill">👤 ${aluno}</div>
+          <div class="pill">⭐ Pontos: ${pontos}</div>
+        </div>
+      `;
+    }
+
+    function fase1() {
+      app.innerHTML = `
+        ${barra("Fase 1 • Complete o verso")}
+        <h2>Qual palavra completa o verso?</h2>
+        <div class="verso">Nossa Escola é um fulgente ______</div>
+        ${criarOpcoes(["luzeiro", "braseiro", "canteiro", "cruzeiro"], "luzeiro", fase2)}
+      `;
+    }
+
+    function fase2() {
+      app.innerHTML = `
+        ${barra("Fase 2 • Quiz do hino")}
+        <h2>Segundo o hino, a escola é um farol de quê?</h2>
+        ${criarOpcoes(["Saber e Esperança", "Força e Vitória", "Arte e Música", "Paz e União"], "Saber e Esperança", fase3)}
+      `;
+    }
+
+    function fase3() {
+      app.innerHTML = `
+        ${barra("Fase 3 • Conhecendo o hino")}
+        <h2>Qual expressão aparece no hino?</h2>
+        ${criarOpcoes(["feraz Barra-Mansa", "bonita Serra Azul", "vale encantado", "terra dos estudantes"], "feraz Barra-Mansa", fase4)}
+      `;
+    }
+
+    function fase4() {
+      ordemEscolhida = [];
+      const embaralhado = [...ordemCorreta].sort(() => Math.random() - 0.5);
+
+      app.innerHTML = `
+        ${barra("Fase 4 • Monte o refrão")}
+        <h2>Clique nos versos na ordem correta:</h2>
+        <div id="linhas">
+          ${embaralhado.map(verso => `<div class="linha" onclick="selecionarLinha(this)">${verso}</div>`).join("")}
+        </div>
+        <p id="ordem" class="sub">Sua ordem:</p>
+        <button onclick="verificarOrdem()">Verificar refrão</button>
+      `;
+    }
+
+    function fase5() {
+      app.innerHTML = `
+        ${barra("Fase 5 • Desafio final")}
+        <h2>Quem é citado como pioneiro no hino?</h2>
+        ${criarOpcoes(["Marciano Maciel", "João de Mello Macedo", "Sílvio Bertoz", "Barra-Mansa"], "Marciano Maciel", final)}
+      `;
+    }
+
+    function criarOpcoes(opcoes, correta, proximaFase) {
+      return opcoes.map(opcao => {
+        return `<button class="opcao" onclick="responder(this, '${opcao}', '${correta}', ${proximaFase.name})">${opcao}</button>`;
+      }).join("");
+    }
+
+    function responder(botao, resposta, correta, proximaFase) {
+      const botoes = document.querySelectorAll(".opcao");
+      botoes.forEach(item => item.disabled = true);
+
+      if (resposta === correta) {
+        botao.classList.add("certa");
+        pontos += 10;
+        setTimeout(proximaFase, 850);
+      } else {
+        botao.classList.add("errada");
+
+        botoes.forEach(item => {
+          if (item.textContent === correta) {
+            item.classList.add("certa");
+          }
+        });
+
+        setTimeout(proximaFase, 1300);
+      }
+    }
+
+    function selecionarLinha(elemento) {
+      if (elemento.classList.contains("sel")) return;
+
+      elemento.classList.add("sel");
+      ordemEscolhida.push(elemento.textContent);
+
+      document.getElementById("ordem").innerHTML =
+        "Sua ordem:<br>" +
+        ordemEscolhida.map((verso, indice) => `${indice + 1}. ${verso}`).join("<br>");
+    }
+
+    function verificarOrdem() {
+      const acertou = JSON.stringify(ordemEscolhida) === JSON.stringify(ordemCorreta);
+
+      if (acertou) {
+        pontos += 30;
+        fase5();
+      } else {
+        app.innerHTML += `
+          <p class="bad">Quase! Tente novamente. O refrão precisa estar na ordem cantada.</p>
+          <button onclick="fase4()">Tentar de novo</button>
+        `;
+      }
+    }
+
+    function final() {
+      salvarRanking(aluno, pontos);
+
+      app.innerHTML = `
+        ${cabecalhoInterno()}
+        <h1>Missão cumprida!</h1>
+        <p class="sub" style="text-align:center">
+          Parabéns, <strong>${aluno}</strong>! Você se tornou um
+          <strong>Guardião do Hino da Escola</strong>.
+        </p>
+
+        <h2 style="text-align:center">Pontuação final: ${pontos} pontos</h2>
+
+        <div class="verso">
+          Salve, Escola bendita,<br>
+          de Ibiporanga bela!<br>
+          Salve, a terra bonita,<br>
+          que esse nome revela!
+        </div>
+
+        <div class="actions">
+          <button onclick="telaRanking()">Ver Ranking Top 5</button>
+          <button onclick="telaInicio()">Novo aluno</button>
+        </div>
+      `;
+    }
+
+    function telaRanking() {
+      const lista = getRanking();
+
+      const linhas = lista.length
+        ? lista.map((registro, indice) => `
+            <tr>
+              <td class="medalha">${medalha(indice)}</td>
+              <td>${registro.nome}</td>
+              <td>${registro.pontos}</td>
+              <td>${registro.data}</td>
+            </tr>
+          `).join("")
+        : '<tr><td colspan="4">Ainda não há pontuações registradas.</td></tr>';
+
+      app.innerHTML = `
+        ${cabecalhoInterno()}
+        <h1>Ranking Top 5</h1>
+        <p class="sub" style="text-align:center">Melhores pontuações salvas neste computador.</p>
+
+        <table class="rank">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Aluno</th>
+              <th>Pontos</th>
+              <th>Data</th>
+            </tr>
+          </thead>
+          <tbody>${linhas}</tbody>
+        </table>
+
+        <div class="actions">
+          <button onclick="telaInicio()">Voltar ao início</button>
+          <button onclick="limparRanking()">Limpar ranking</button>
+        </div>
+      `;
+    }
+
+    function limparRanking() {
+      const confirmar = confirm("Tem certeza que deseja apagar o ranking deste computador?");
+
+      if (confirmar) {
+        localStorage.removeItem(STORAGE_KEY);
+        telaRanking();
+      }
+    }
+
+    telaInicio();
+  </script>
+</body>
+</html>
