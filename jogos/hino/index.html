@@ -245,6 +245,7 @@
 
     const app = document.getElementById("app");
     const STORAGE_KEY = "ranking_hino_marciano_top5";
+    const JOGO_ID = "Missão Hino da Escola";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxetMcAK5hcO3kAgXknVbEdFh_IAYSoCNwpf9H7MhTtJPlNBfNvLouJfCFZI7FmsU_swQ/exec";
     const ordemCorreta = [
       "Salve, Escola bendita",
@@ -254,6 +255,25 @@
     ];
 
     let ordemEscolhida = [];
+
+   async function getRanking() {
+      try {
+        const response = await fetch(SCRIPT_URL + "?jogo=" + encodeURIComponent(JOGO_ID));
+        const dados = await response.json();
+
+        if (!Array.isArray(dados)) {
+          return getRankingLocal();
+        }
+
+        return dados
+          .filter(item => item.jogo === JOGO_ID)
+          .sort((a, b) => Number(b.pontos) - Number(a.pontos))
+          .slice(0, 5);
+      } catch (e) {
+        console.error("Erro ao carregar ranking online", e);
+        return getRankingLocal();
+      }
+    }
 
     function getRankingLocal() {
       try {
@@ -267,54 +287,30 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(lista.slice(0, 5)));
     }
 
-    async function getRankingOnline() {
-      try {
-        const response = await fetch(SCRIPT_URL + "?t=" + Date.now());
-        const dados = await response.json();
-
-        if (!Array.isArray(dados)) {
-          return getRankingLocal();
-        }
-
-        return dados
-          .map(item => ({
-            nome: item.nome || item.Nome || "",
-            pontos: Number(item.pontos || item.Pontos || 0),
-            data: item.data || item.Data || ""
-          }))
-          .sort((a, b) => b.pontos - a.pontos)
-          .slice(0, 5);
-      } catch (error) {
-        console.error("Erro ao carregar ranking online:", error);
-        return getRankingLocal();
-      }
-    }
-
-    async function salvarRanking(nome, pontuacao) {
+    function salvarRanking(nome, pontuacao) {
       const lista = getRankingLocal();
 
       lista.push({
         nome: nome,
         pontos: pontuacao,
+        jogo: JOGO_ID,
         data: new Date().toLocaleDateString("pt-BR")
       });
 
-      lista.sort((a, b) => b.pontos - a.pontos);
+      lista.sort((a, b) => Number(b.pontos) - Number(a.pontos));
       setRanking(lista);
 
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify({
-            nome: nome,
-            pontos: pontuacao,
-            jogo: "Missão Hino da Escola"
-          })
-        });
-      } catch (error) {
-        console.error("Erro ao salvar no Google Sheets:", error);
-      }
+      fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+          nome: nome,
+          pontos: pontuacao,
+          jogo: JOGO_ID,
+          tempo: "",
+          jogadas: ""
+        })
+      }).catch(() => {});
     }
 
     function medalha(indice) {
@@ -473,8 +469,8 @@
       }
     }
 
-    async function final() {
-      await salvarRanking(aluno, pontos);
+    function final() {
+      salvarRanking(aluno, pontos);
 
       app.innerHTML = `
         ${cabecalhoInterno()}
@@ -501,13 +497,7 @@
     }
 
     async function telaRanking() {
-      app.innerHTML = `
-        ${cabecalhoInterno()}
-        <h1>Ranking Top 5</h1>
-        <p class="sub" style="text-align:center">Carregando ranking online...</p>
-      `;
-
-      const lista = await getRankingOnline();
+      const lista = await getRanking();
 
       const linhas = lista.length
         ? lista.map((registro, indice) => `
@@ -522,8 +512,8 @@
 
       app.innerHTML = `
         ${cabecalhoInterno()}
-        <h1>Ranking Top 5</h1>
-        <p class="sub" style="text-align:center">Ranking geral salvo no Google Sheets.</p>
+        <h1>Ranking Hino da Escola</h1>
+        <p class="sub" style="text-align:center">Melhores pontuações salvas neste computador.</p>
 
         <table class="rank">
           <thead>
@@ -539,13 +529,8 @@
 
         <div class="actions">
           <button onclick="telaInicio()">Voltar ao início</button>
-          <button onclick="limparRanking()">Limpar ranking local</button>
+          <button onclick="limparRanking()">Limpar ranking</button>
         </div>
-
-        <p class="small">
-          Observação: o botão limpar ranking apaga apenas o ranking salvo neste navegador.
-          O ranking online permanece salvo na planilha.
-        </p>
       `;
     }
 
