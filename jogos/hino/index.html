@@ -247,7 +247,7 @@
     const STORAGE_KEY = "ranking_hino_marciano_top5";
     const JOGO_ID = "Missão Hino da Escola";
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxetMcAK5hcO3kAgXknVbEdFh_IAYSoCNwpf9H7MhTtJPlNBfNvLouJfCFZI7FmsU_swQ/exec";
-    const ordemCorreta = [
+const ordemCorreta = [
       "Salve, Escola bendita",
       "de Ibiporanga bela",
       "Salve, a terra bonita",
@@ -258,17 +258,26 @@
 
    async function getRanking() {
       try {
-        const response = await fetch(SCRIPT_URL + "?jogo=" + encodeURIComponent(JOGO_ID));
+        const url = SCRIPT_URL + "?jogo=" + encodeURIComponent(JOGO_ID);
+        const response = await fetch(url);
         const dados = await response.json();
 
         if (!Array.isArray(dados)) {
           return getRankingLocal();
         }
 
-        return dados
-          .filter(item => item.jogo === JOGO_ID)
+        const online = dados
+          .filter(item => item && (!item.jogo || item.jogo === JOGO_ID))
+          .map(item => ({
+            nome: item.nome || "-",
+            pontos: Number(item.pontos) || 0,
+            jogo: item.jogo || JOGO_ID,
+            data: formatarData(item.data)
+          }))
           .sort((a, b) => Number(b.pontos) - Number(a.pontos))
           .slice(0, 5);
+
+        return online.length ? online : getRankingLocal();
       } catch (e) {
         console.error("Erro ao carregar ranking online", e);
         return getRankingLocal();
@@ -288,15 +297,15 @@
     }
 
     function salvarRanking(nome, pontuacao) {
-      const lista = getRankingLocal();
-
-      lista.push({
+      const registroLocal = {
         nome: nome,
-        pontos: pontuacao,
+        pontos: Number(pontuacao) || 0,
         jogo: JOGO_ID,
         data: new Date().toLocaleDateString("pt-BR")
-      });
+      };
 
+      const lista = getRankingLocal();
+      lista.push(registroLocal);
       lista.sort((a, b) => Number(b.pontos) - Number(a.pontos));
       setRanking(lista);
 
@@ -305,12 +314,25 @@
         mode: "no-cors",
         body: JSON.stringify({
           nome: nome,
-          pontos: pontuacao,
+          pontos: Number(pontuacao) || 0,
           jogo: JOGO_ID,
           tempo: "",
           jogadas: ""
         })
       }).catch(() => {});
+    }
+
+    function formatarData(valor) {
+      if (!valor) return "-";
+
+      try {
+        const data = new Date(valor);
+        if (!isNaN(data.getTime())) {
+          return data.toLocaleDateString("pt-BR");
+        }
+      } catch (e) {}
+
+      return String(valor);
     }
 
     function medalha(indice) {
@@ -497,23 +519,29 @@
     }
 
     async function telaRanking() {
+      app.innerHTML = `
+        ${cabecalhoInterno()}
+        <h1>Ranking Hino da Escola</h1>
+        <p class="sub" style="text-align:center">Carregando ranking do Hino da Escola...</p>
+      `;
+
       const lista = await getRanking();
 
       const linhas = lista.length
         ? lista.map((registro, indice) => `
             <tr>
               <td class="medalha">${medalha(indice)}</td>
-              <td>${registro.nome}</td>
-              <td>${registro.pontos}</td>
-              <td>${registro.data}</td>
+              <td>${registro.nome || "-"}</td>
+              <td>${Number(registro.pontos) || 0}</td>
+              <td>${formatarData(registro.data)}</td>
             </tr>
           `).join("")
-        : '<tr><td colspan="4">Ainda não há pontuações registradas.</td></tr>';
+        : '<tr><td colspan="4">Ainda não há pontuações registradas para este jogo.</td></tr>';
 
       app.innerHTML = `
         ${cabecalhoInterno()}
         <h1>Ranking Hino da Escola</h1>
-        <p class="sub" style="text-align:center">Melhores pontuações salvas neste computador.</p>
+        <p class="sub" style="text-align:center">Ranking do Hino da Escola salvo no Google Sheets.</p>
 
         <table class="rank">
           <thead>
@@ -527,9 +555,14 @@
           <tbody>${linhas}</tbody>
         </table>
 
+        <p class="small">
+          Observação: o botão limpar ranking apaga apenas o ranking salvo neste navegador.
+          O ranking online permanece salvo na planilha.
+        </p>
+
         <div class="actions">
           <button onclick="telaInicio()">Voltar ao início</button>
-          <button onclick="limparRanking()">Limpar ranking</button>
+          <button onclick="limparRanking()">Limpar ranking local</button>
         </div>
       `;
     }
