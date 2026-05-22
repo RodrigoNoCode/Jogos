@@ -245,7 +245,7 @@
 
     const app = document.getElementById("app");
     const STORAGE_KEY = "ranking_hino_marciano_top5";
-
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxetMcAK5hcO3kAgXknVbEdFh_IAYSoCNwpf9H7MhTtJPlNBfNvLouJfCFZI7FmsU_swQ/exec";
     const ordemCorreta = [
       "Salve, Escola bendita",
       "de Ibiporanga bela",
@@ -255,7 +255,7 @@
 
     let ordemEscolhida = [];
 
-    function getRanking() {
+    function getRankingLocal() {
       try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
       } catch (error) {
@@ -267,8 +267,31 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(lista.slice(0, 5)));
     }
 
-    function salvarRanking(nome, pontuacao) {
-      const lista = getRanking();
+    async function getRankingOnline() {
+      try {
+        const response = await fetch(SCRIPT_URL + "?t=" + Date.now());
+        const dados = await response.json();
+
+        if (!Array.isArray(dados)) {
+          return getRankingLocal();
+        }
+
+        return dados
+          .map(item => ({
+            nome: item.nome || item.Nome || "",
+            pontos: Number(item.pontos || item.Pontos || 0),
+            data: item.data || item.Data || ""
+          }))
+          .sort((a, b) => b.pontos - a.pontos)
+          .slice(0, 5);
+      } catch (error) {
+        console.error("Erro ao carregar ranking online:", error);
+        return getRankingLocal();
+      }
+    }
+
+    async function salvarRanking(nome, pontuacao) {
+      const lista = getRankingLocal();
 
       lista.push({
         nome: nome,
@@ -278,6 +301,20 @@
 
       lista.sort((a, b) => b.pontos - a.pontos);
       setRanking(lista);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify({
+            nome: nome,
+            pontos: pontuacao,
+            jogo: "Missão Hino da Escola"
+          })
+        });
+      } catch (error) {
+        console.error("Erro ao salvar no Google Sheets:", error);
+      }
     }
 
     function medalha(indice) {
@@ -436,8 +473,8 @@
       }
     }
 
-    function final() {
-      salvarRanking(aluno, pontos);
+    async function final() {
+      await salvarRanking(aluno, pontos);
 
       app.innerHTML = `
         ${cabecalhoInterno()}
@@ -463,8 +500,14 @@
       `;
     }
 
-    function telaRanking() {
-      const lista = getRanking();
+    async function telaRanking() {
+      app.innerHTML = `
+        ${cabecalhoInterno()}
+        <h1>Ranking Top 5</h1>
+        <p class="sub" style="text-align:center">Carregando ranking online...</p>
+      `;
+
+      const lista = await getRankingOnline();
 
       const linhas = lista.length
         ? lista.map((registro, indice) => `
@@ -480,7 +523,7 @@
       app.innerHTML = `
         ${cabecalhoInterno()}
         <h1>Ranking Top 5</h1>
-        <p class="sub" style="text-align:center">Melhores pontuações salvas neste computador.</p>
+        <p class="sub" style="text-align:center">Ranking geral salvo no Google Sheets.</p>
 
         <table class="rank">
           <thead>
@@ -496,8 +539,13 @@
 
         <div class="actions">
           <button onclick="telaInicio()">Voltar ao início</button>
-          <button onclick="limparRanking()">Limpar ranking</button>
+          <button onclick="limparRanking()">Limpar ranking local</button>
         </div>
+
+        <p class="small">
+          Observação: o botão limpar ranking apaga apenas o ranking salvo neste navegador.
+          O ranking online permanece salvo na planilha.
+        </p>
       `;
     }
 
