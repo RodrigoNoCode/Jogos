@@ -1,9 +1,13 @@
+# index.html — HUB PRINCIPAL MARCIANO MAKER
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Portal Marciano Maker</title>
+
   <style>
     :root {
       --bg1: #061b3a;
@@ -11,7 +15,6 @@
       --gold: #ffd56a;
       --gold-dark: #b57918;
       --text: #fff7df;
-      --card: rgba(255, 255, 255, 0.09);
       --border: rgba(255, 213, 106, 0.35);
     }
 
@@ -23,178 +26,341 @@
       margin: 0;
       min-height: 100vh;
       font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(255, 213, 106, 0.16), transparent 30%),
-        radial-gradient(circle at top right, rgba(41, 124, 255, 0.20), transparent 35%),
-        linear-gradient(180deg, var(--bg2), var(--bg1) 55%, #020712);
       color: var(--text);
+
+      background:
+        radial-gradient(circle at top left, rgba(255, 213, 106, 0.14), transparent 30%),
+        radial-gradient(circle at top right, rgba(41, 124, 255, 0.22), transparent 35%),
+        linear-gradient(180deg, var(--bg2), var(--bg1) 55%, #020712);
     }
 
-    header {
+    .wrap {
+      max-width: 1250px;
+      margin: auto;
+      padding: 24px;
+    }
+
+    .hero {
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 30px;
       text-align: center;
-      padding: 42px 20px 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      margin-bottom: 24px;
     }
 
     .logo {
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
       object-fit: contain;
-      border-radius: 28px;
-      filter: drop-shadow(0 0 18px rgba(255, 213, 106, 0.65));
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 18px rgba(255,213,106,0.55));
     }
 
     h1 {
-      margin: 16px 0 6px;
+      margin: 0;
       color: var(--gold);
-      font-size: clamp(34px, 5vw, 56px);
-      letter-spacing: 0.5px;
+      font-size: clamp(36px, 5vw, 64px);
+      text-shadow: 0 0 20px rgba(255,213,106,0.35);
     }
 
-    .subtitle {
-      max-width: 780px;
-      margin: 0 auto;
-      font-size: 19px;
-      line-height: 1.5;
-      opacity: 0.92;
-    }
-
-    .container {
-      max-width: 1120px;
-      margin: auto;
-      padding: 24px 20px 48px;
+    .sub {
+      max-width: 850px;
+      margin: 14px auto 0;
+      line-height: 1.6;
+      font-size: 20px;
+      opacity: .92;
     }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
     .card {
-      min-height: 285px;
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      padding: 24px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.035));
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 24px;
-      box-shadow: 0 18px 45px rgba(0,0,0,0.34);
-      transition: transform 0.22s ease, border-color 0.22s ease;
+      min-height: 320px;
+      transition: .25s ease;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      border-color: var(--gold);
+      transform: translateY(-6px);
+      border-color: rgba(255,213,106,0.35);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.35);
     }
 
     .badge {
       display: inline-block;
-      width: fit-content;
-      padding: 7px 13px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--border);
-      font-size: 14px;
+      background: rgba(255,213,106,0.14);
       color: var(--gold);
-      font-weight: 700;
+      border: 1px solid rgba(255,213,106,0.25);
+      font-weight: bold;
+      margin-bottom: 16px;
+      width: fit-content;
     }
 
     .icon {
-      font-size: 56px;
-      margin: 18px 0 8px;
+      font-size: 70px;
+      margin-bottom: 14px;
     }
 
     .card h2 {
       margin: 0 0 10px;
       color: var(--gold);
-      font-size: 26px;
+      font-size: 28px;
     }
 
     .card p {
-      margin: 0;
-      line-height: 1.55;
-      opacity: 0.92;
+      line-height: 1.6;
+      opacity: .92;
+      font-size: 17px;
     }
 
     .btn {
-      display: inline-block;
-      width: fit-content;
       margin-top: 20px;
-      padding: 14px 20px;
-      border-radius: 18px;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
       background: linear-gradient(135deg, var(--gold), var(--gold-dark));
       color: #1d1200;
-      font-weight: 800;
-      text-decoration: none;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.28);
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-weight: bold;
+      transition: .2s ease;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .btn:hover {
+      transform: scale(1.03);
     }
 
     footer {
+      margin-top: 30px;
       text-align: center;
-      opacity: 0.76;
-      padding: 28px 15px 38px;
-      line-height: 1.5;
+      opacity: .75;
+      line-height: 1.6;
+      padding-bottom: 30px;
+    }
+
+    .ranking-box {
+      margin-top: 24px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 24px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ranking-box h3 {
+      margin-top: 0;
+      color: var(--gold);
+    }
+
+    .ranking-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ranking-item:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
-<body>
-  <header>
-    <img class="logo" src="assets/img/logo-marciano-maker.png" alt="Logo Marciano Maker" />
-    <h1>Portal Marciano Maker</h1>
-    <p class="subtitle">
-      Jogos educacionais da Escola Municipal Marciano Maciel da Silva.
-      Aprender, brincar e valorizar nossa história.
-    </p>
-  </header>
 
-  <main class="container">
+<body>
+  <div class="wrap">
+
+    <section class="hero">
+      <img
+        class="logo"
+        src="assets/img/logo-marciano-maker.png"
+        alt="Marciano Maker"
+        onerror="this.style.display='none'"
+      />
+
+      <h1>🚀 Portal Marciano Maker</h1>
+
+      <p class="sub">
+        Plataforma de jogos educacionais gamificados da Escola Municipal
+        Marciano Maciel da Silva. Aprenda brincando com tecnologia,
+        robótica, lógica, português, música e cultura maker.
+      </p>
+    </section>
+
+
     <section class="grid">
+
       <article class="card">
         <div>
           <span class="badge">Hino da Escola</span>
-          <div class="icon">📖💎</div>
+          <div class="icon">🎵</div>
           <h2>Missão Hino da Escola</h2>
           <p>
-            Complete versos, responda perguntas e monte o refrão do Hino da Escola.
-            Ao final, veja sua pontuação no Ranking Top 5.
+            Complete desafios sobre o hino da escola, memorize versos,
+            pratique leitura e conquiste pontos no ranking.
           </p>
         </div>
-        <a class="btn" href="jogos/hino/">Jogar agora</a>
+
+        <a class="btn" href="jogos/hino/">🎮 Jogar agora</a>
       </article>
 
-     <article class="card">
-  <div>
-    <span class="badge">Robótica Maker</span>
-    <div class="icon">🤖</div>
-    <h2>Memória Maker</h2>
-    <p>
-      Encontre os pares das peças de robótica, eletrônica e cultura maker.
-      Ganhe pontos e entre para o ranking da escola.
-    </p>
-  </div>
 
-  <a class="btn" href="jogos/memoria/">Jogar agora</a>
-</article>
+      <article class="card">
+        <div>
+          <span class="badge">Robótica Maker</span>
+          <div class="icon">🤖</div>
+          <h2>Memória Maker</h2>
+          <p>
+            Encontre os pares das peças de robótica, eletrônica e cultura maker.
+            Ganhe pontos e entre para o ranking da escola.
+          </p>
+        </div>
+
+        <a class="btn" href="jogos/memoria/">🎮 Jogar agora</a>
+      </article>
+
+
+      <article class="card">
+        <div>
+          <span class="badge">Português</span>
+          <div class="icon">🔤</div>
+          <h2>Formando Palavras</h2>
+          <p>
+            Utilize as sílabas disponíveis para formar palavras válidas,
+            ganhar pontos e subir no ranking do Marciano Maker.
+          </p>
+        </div>
+
+        <a class="btn" href="jogos/palavras/">🎮 Jogar agora</a>
+      </article>
+
 
       <article class="card">
         <div>
           <span class="badge">Em breve</span>
           <div class="icon">🔢</div>
-          <h2>Desafio Matemático</h2>
+          <h2>Matemática Espacial</h2>
           <p>
-            Atividades rápidas com pontuação para treinar raciocínio lógico
-            e operações básicas.
+            Resolva desafios matemáticos, explore planetas e complete
+            missões espaciais usando lógica e raciocínio.
           </p>
         </div>
-        <a class="btn" href="#" onclick="alert('Jogo em desenvolvimento!')">Em breve</a>
-      </article>
-    </section>
-  </main>
 
-  <footer>
-    Escola Municipal Marciano Maciel da Silva • Ibiporanga • Tanabi/SP<br />
-    Projeto Marciano Maker
-  </footer>
+        <a class="btn" href="#" onclick="alert('Jogo em desenvolvimento!')">
+          🚧 Em desenvolvimento
+        </a>
+      </article>
+
+
+      <article class="card">
+        <div>
+          <span class="badge">Scratch Lab</span>
+          <div class="icon">👾</div>
+          <h2>Scratch Game Lab</h2>
+          <p>
+            Área destinada aos projetos desenvolvidos pelos alunos
+            utilizando Scratch e programação criativa.
+          </p>
+        </div>
+
+        <a class="btn" href="#" onclick="alert('Área em desenvolvimento!')">
+          🚧 Em desenvolvimento
+        </a>
+      </article>
+
+
+      <article class="card">
+        <div>
+          <span class="badge">Portal Maker</span>
+          <div class="icon">🌌</div>
+          <h2>Novas Aventuras</h2>
+          <p>
+            Em breve: desafios com IA, quizzes, robótica, leitura,
+            gamificação, Minecraft Education e muito mais.
+          </p>
+        </div>
+
+        <a class="btn" href="#" onclick="alert('Novidades chegando!')">
+          ✨ Em breve
+        </a>
+      </article>
+
+    </section>
+
+
+    <section class="ranking-box">
+      <h3>🏆 Portal Marciano Maker</h3>
+
+      <div class="ranking-item">
+        <span>🎵 Missão Hino da Escola</span>
+        <span>Ranking individual por jogo</span>
+      </div>
+
+      <div class="ranking-item">
+        <span>🤖 Memória Maker</span>
+        <span>Ranking individual por jogo</span>
+      </div>
+
+      <div class="ranking-item">
+        <span>🔤 Formando Palavras</span>
+        <span>Ranking individual por jogo</span>
+      </div>
+    </section>
+
+
+    <footer>
+      Escola Municipal Marciano Maciel da Silva<br>
+      Projeto Tanabi Info Maker • Portal Educacional Gamificado
+    </footer>
+
+  </div>
 </body>
 </html>
+```
+
+# Estrutura das pastas
+
+```txt
+marciano-maker-games/
+│
+├── index.html
+│
+├── assets/
+│   └── img/
+│       └── logo-marciano-maker.png
+│
+└── jogos/
+    ├── hino/
+    │   └── index.html
+    │
+    ├── memoria/
+    │   └── index.html
+    │
+    └── palavras/
+        └── index.html
+```
+
+# IMPORTANTE
+
+Os rankings mostrando apenas 2 nomes NÃO têm relação com o index principal.
+
+Isso acontece normalmente por:
+
+* cache do navegador
+* Apps Script antigo
+* filtro do top 5
+* poucos registros online
+
+O index acima apenas organiza e aponta corretamente para todos os jogos.
