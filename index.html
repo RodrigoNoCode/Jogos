@@ -1,11 +1,9 @@
-# index.html — HUB PRINCIPAL MARCIANO MAKER
-
-```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Portal Marciano Maker</title>
 
   <style>
@@ -35,7 +33,7 @@
     }
 
     .wrap {
-      max-width: 1250px;
+      max-width: 1300px;
       margin: auto;
       padding: 24px;
     }
@@ -71,6 +69,13 @@
       line-height: 1.6;
       font-size: 20px;
       opacity: .92;
+    }
+
+    .section-title {
+      margin: 40px 0 20px;
+      color: var(--gold);
+      font-size: 38px;
+      text-align: center;
     }
 
     .grid {
@@ -145,222 +150,228 @@
       transform: scale(1.03);
     }
 
+    .ranking-card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      padding: 24px;
+      min-height: 280px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    }
+
+    .ranking-card h3 {
+      margin-top: 0;
+      color: var(--gold);
+      font-size: 28px;
+    }
+
+    .rank-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 17px;
+    }
+
+    .rank-item:last-child {
+      border-bottom: none;
+    }
+
     footer {
-      margin-top: 30px;
+      margin-top: 40px;
       text-align: center;
       opacity: .75;
       line-height: 1.6;
       padding-bottom: 30px;
     }
-
-    .ranking-box {
-      margin-top: 24px;
-      background: rgba(0,0,0,0.18);
-      border-radius: 24px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .ranking-box h3 {
-      margin-top: 0;
-      color: var(--gold);
-    }
-
-    .ranking-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .ranking-item:last-child {
-      border-bottom: none;
-    }
   </style>
 </head>
 
 <body>
-  <div class="wrap">
 
-    <section class="hero">
-      <img
-        class="logo"
-        src="assets/img/logo-marciano-maker.png"
-        alt="Marciano Maker"
-        onerror="this.style.display='none'"
-      />
+<div class="wrap">
 
-      <h1>🚀 Portal Marciano Maker</h1>
+  <section class="hero">
 
-      <p class="sub">
-        Plataforma de jogos educacionais gamificados da Escola Municipal
-        Marciano Maciel da Silva. Aprenda brincando com tecnologia,
-        robótica, lógica, português, música e cultura maker.
-      </p>
-    </section>
+    <img
+      class="logo"
+      src="assets/img/logo-marciano-maker.png"
+      alt="Marciano Maker"
+      onerror="this.style.display='none'"
+    />
 
+    <h1>🚀 Portal Marciano Maker</h1>
 
-    <section class="grid">
+    <p class="sub">
+      Plataforma de jogos educacionais gamificados da Escola Municipal
+      Marciano Maciel da Silva.
+      Aprenda brincando com tecnologia, robótica, lógica,
+      português, música e cultura maker.
+    </p>
 
-      <article class="card">
-        <div>
-          <span class="badge">Hino da Escola</span>
-          <div class="icon">🎵</div>
-          <h2>Missão Hino da Escola</h2>
-          <p>
-            Complete desafios sobre o hino da escola, memorize versos,
-            pratique leitura e conquiste pontos no ranking.
-          </p>
-        </div>
+  </section>
 
-        <a class="btn" href="jogos/hino/">🎮 Jogar agora</a>
-      </article>
+  <h2 class="section-title">🎮 Jogos Educacionais</h2>
 
+  <section class="grid">
 
-      <article class="card">
-        <div>
-          <span class="badge">Robótica Maker</span>
-          <div class="icon">🤖</div>
-          <h2>Memória Maker</h2>
-          <p>
-            Encontre os pares das peças de robótica, eletrônica e cultura maker.
-            Ganhe pontos e entre para o ranking da escola.
-          </p>
-        </div>
+    <article class="card">
+      <div>
+        <span class="badge">Hino da Escola</span>
+        <div class="icon">🎵</div>
+        <h2>Missão Hino da Escola</h2>
 
-        <a class="btn" href="jogos/memoria/">🎮 Jogar agora</a>
-      </article>
-
-
-      <article class="card">
-        <div>
-          <span class="badge">Português</span>
-          <div class="icon">🔤</div>
-          <h2>Formando Palavras</h2>
-          <p>
-            Utilize as sílabas disponíveis para formar palavras válidas,
-            ganhar pontos e subir no ranking do Marciano Maker.
-          </p>
-        </div>
-
-        <a class="btn" href="jogos/palavras/">🎮 Jogar agora</a>
-      </article>
-
-
-      <article class="card">
-        <div>
-          <span class="badge">Em breve</span>
-          <div class="icon">🔢</div>
-          <h2>Matemática Espacial</h2>
-          <p>
-            Resolva desafios matemáticos, explore planetas e complete
-            missões espaciais usando lógica e raciocínio.
-          </p>
-        </div>
-
-        <a class="btn" href="#" onclick="alert('Jogo em desenvolvimento!')">
-          🚧 Em desenvolvimento
-        </a>
-      </article>
-
-
-      <article class="card">
-        <div>
-          <span class="badge">Scratch Lab</span>
-          <div class="icon">👾</div>
-          <h2>Scratch Game Lab</h2>
-          <p>
-            Área destinada aos projetos desenvolvidos pelos alunos
-            utilizando Scratch e programação criativa.
-          </p>
-        </div>
-
-        <a class="btn" href="#" onclick="alert('Área em desenvolvimento!')">
-          🚧 Em desenvolvimento
-        </a>
-      </article>
-
-
-      <article class="card">
-        <div>
-          <span class="badge">Portal Maker</span>
-          <div class="icon">🌌</div>
-          <h2>Novas Aventuras</h2>
-          <p>
-            Em breve: desafios com IA, quizzes, robótica, leitura,
-            gamificação, Minecraft Education e muito mais.
-          </p>
-        </div>
-
-        <a class="btn" href="#" onclick="alert('Novidades chegando!')">
-          ✨ Em breve
-        </a>
-      </article>
-
-    </section>
-
-
-    <section class="ranking-box">
-      <h3>🏆 Portal Marciano Maker</h3>
-
-      <div class="ranking-item">
-        <span>🎵 Missão Hino da Escola</span>
-        <span>Ranking individual por jogo</span>
+        <p>
+          Complete desafios sobre o hino da escola,
+          memorize versos e pratique leitura.
+        </p>
       </div>
 
-      <div class="ranking-item">
-        <span>🤖 Memória Maker</span>
-        <span>Ranking individual por jogo</span>
+      <a class="btn" href="jogos/hino/">
+        🎮 Jogar agora
+      </a>
+    </article>
+
+
+    <article class="card">
+      <div>
+        <span class="badge">Robótica Maker</span>
+        <div class="icon">🤖</div>
+        <h2>Memória Maker</h2>
+
+        <p>
+          Encontre os pares das peças de robótica,
+          eletrônica e cultura maker.
+        </p>
       </div>
 
-      <div class="ranking-item">
-        <span>🔤 Formando Palavras</span>
-        <span>Ranking individual por jogo</span>
+      <a class="btn" href="jogos/memoria/">
+        🎮 Jogar agora
+      </a>
+    </article>
+
+
+    <article class="card">
+      <div>
+        <span class="badge">Português</span>
+        <div class="icon">🔤</div>
+        <h2>Formando Palavras</h2>
+
+        <p>
+          Utilize as sílabas disponíveis para formar palavras
+          e ganhar pontos no ranking.
+        </p>
       </div>
-    </section>
+
+      <a class="btn" href="jogos/palavras/">
+        🎮 Jogar agora
+      </a>
+    </article>
+
+  </section>
 
 
-    <footer>
-      Escola Municipal Marciano Maciel da Silva<br>
-      Projeto Tanabi Info Maker • Portal Educacional Gamificado
-    </footer>
+  <h2 class="section-title">🏆 Hall dos Makers</h2>
 
-  </div>
+  <section class="grid">
+
+    <div class="ranking-card">
+      <h3>🎵 Top Hino</h3>
+
+      <div id="rank-hino">
+        Carregando ranking...
+      </div>
+
+      <a class="btn" href="jogos/hino/">
+        Ver jogo
+      </a>
+    </div>
+
+
+    <div class="ranking-card">
+      <h3>🤖 Top Memória</h3>
+
+      <div id="rank-memoria">
+        Carregando ranking...
+      </div>
+
+      <a class="btn" href="jogos/memoria/">
+        Ver jogo
+      </a>
+    </div>
+
+
+    <div class="ranking-card">
+      <h3>🔤 Top Palavras</h3>
+
+      <div id="rank-palavras">
+        Carregando ranking...
+      </div>
+
+      <a class="btn" href="jogos/palavras/">
+        Ver jogo
+      </a>
+    </div>
+
+  </section>
+
+
+  <footer>
+    Escola Municipal Marciano Maciel da Silva<br>
+    Projeto Tanabi Info Maker • Portal Educacional Gamificado
+  </footer>
+
+</div>
+
+<script>
+
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-cGLcLMkKs46z42MIWyX7raAylOxjaWU_VOXztKvU2KRJvfLda7X8iWHLlQ1bn2x2yQ/exec";
+
+async function carregarRanking(jogo, elementoId) {
+
+  try {
+
+    const response = await fetch(
+      SCRIPT_URL + "?jogo=" + encodeURIComponent(jogo)
+    );
+
+    const dados = await response.json();
+
+    const lista = dados
+      .filter(item =>
+        item.jogo &&
+        item.jogo.toLowerCase() === jogo.toLowerCase()
+      )
+      .sort((a,b) => Number(b.pontos) - Number(a.pontos))
+      .slice(0,5);
+
+    const medals = ["🥇","🥈","🥉","⭐","⭐"];
+
+    document.getElementById(elementoId).innerHTML =
+      lista.length
+      ? lista.map((item,index) => `
+          <div class="rank-item">
+            <span>${medals[index]} ${item.nome}</span>
+            <strong>${item.pontos}</strong>
+          </div>
+        `).join("")
+      : "Sem pontuações.";
+
+  } catch(err) {
+
+    document.getElementById(elementoId).innerHTML =
+      "Erro ao carregar ranking.";
+
+  }
+}
+
+carregarRanking("Missão Hino da Escola", "rank-hino");
+
+carregarRanking("Memória Maker - Robótica", "rank-memoria");
+
+carregarRanking("Formando Palavras - Sílabas", "rank-palavras");
+
+</script>
+
 </body>
 </html>
-```
-
-# Estrutura das pastas
-
-```txt
-marciano-maker-games/
-│
-├── index.html
-│
-├── assets/
-│   └── img/
-│       └── logo-marciano-maker.png
-│
-└── jogos/
-    ├── hino/
-    │   └── index.html
-    │
-    ├── memoria/
-    │   └── index.html
-    │
-    └── palavras/
-        └── index.html
-```
-
-# IMPORTANTE
-
-Os rankings mostrando apenas 2 nomes NÃO têm relação com o index principal.
-
-Isso acontece normalmente por:
-
-* cache do navegador
-* Apps Script antigo
-* filtro do top 5
-* poucos registros online
-
-O index acima apenas organiza e aponta corretamente para todos os jogos.
