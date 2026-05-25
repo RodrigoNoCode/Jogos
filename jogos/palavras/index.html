@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Formando Palavras — Marciano Maker</title>
+  <style>
+    :root{
+      --bg1:#061b3a; --bg2:#123d7a; --gold:#ffd56a; --gold-dark:#b57918;
+      --text:#fff7df; --green:#33d680; --red:#ff6868; --blue:#149eea;
+      --border:rgba(255,213,106,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif; color:var(--text);
+      background:
+        radial-gradient(circle at top left,rgba(255,213,106,.16),transparent 30%),
+        radial-gradient(circle at top right,rgba(41,124,255,.22),transparent 35%),
+        linear-gradient(180deg,var(--bg2),var(--bg1) 55%,#020712);
+    }
+    .wrap{max-width:1180px;margin:auto;padding:24px}
+    .card{
+      background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.035));
+      border:1px solid var(--border); border-radius:30px; padding:24px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    .logo{width:110px;height:110px;object-fit:contain;display:block;margin:0 auto 10px;filter:drop-shadow(0 0 16px rgba(255,213,106,.65));border-radius:22px}
+    h1{margin:0;text-align:center;color:var(--gold);font-size:clamp(34px,5vw,54px);text-shadow:0 0 18px rgba(255,213,106,.35);line-height:1.05}
+    h2{color:var(--gold);margin:0 0 10px;font-size:28px}
+    .sub{font-size:19px;line-height:1.5;opacity:.92;text-align:center}
+    .topbar{display:flex;gap:12px;justify-content:space-between;align-items:center;margin:18px 0;flex-wrap:wrap}
+    .pill{background:rgba(0,0,0,.25);border:1px solid var(--border);padding:10px 15px;border-radius:999px;font-weight:800;min-width:120px;text-align:center}
+    .layout{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}}
+    .panel{background:rgba(0,0,0,.20);border:1px solid rgba(255,255,255,.13);border-radius:26px;padding:20px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+    .inputRow{display:flex;gap:10px;margin-top:14px}
+    @media(max-width:650px){.inputRow{flex-direction:column}}
+    input{
+      width:100%;padding:16px;border-radius:16px;border:1px solid rgba(255,213,106,.45);
+      background:rgba(255,255,255,.12);color:white;font-size:22px;font-weight:900;
+      text-transform:uppercase;outline:none;
+    }
+    input::placeholder{color:rgba(255,255,255,.62)}
+    input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,213,106,.18)}
+    button,.btnlink{
+      border:0;border-radius:18px;padding:14px 18px;margin:6px;
+      background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:#1d1200;
+      font-weight:bold;cursor:pointer;font-size:17px;box-shadow:0 8px 20px rgba(0,0,0,.25);
+      text-decoration:none;display:inline-block;
+    }
+    button:hover,.btnlink:hover{transform:translateY(-2px)}
+    button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    .danger{background:linear-gradient(135deg,#ff8aa0,var(--red));color:white}
+    .info{background:linear-gradient(135deg,#6dd7ff,var(--blue));color:white}
+    .actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:12px}
+    .msg{min-height:42px;margin-top:12px;font-size:20px;font-weight:900;text-align:center;color:var(--gold)}
+    .ok{color:#6dff9c}.bad{color:#ff9c9c}.warn{color:var(--gold)}
+    .syllables{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px}
+    @media(max-width:760px){.syllables{grid-template-columns:repeat(5,1fr)}}
+    .syll{border:1px solid rgba(255,213,106,.35);border-radius:14px;padding:10px 4px;text-align:center;font-size:21px;font-weight:900;color:var(--text);background:rgba(255,255,255,.10);user-select:none}
+    .foundList{display:flex;gap:8px;flex-wrap:wrap;max-height:255px;overflow:auto;padding:10px;background:rgba(0,0,0,.18);border-radius:18px;border:1px dashed rgba(255,213,106,.35);min-height:70px}
+    .tag{background:rgba(51,214,128,.18);border:1px solid rgba(51,214,128,.50);color:var(--text);padding:7px 10px;border-radius:999px;font-weight:900}
+    .rank{width:100%;border-collapse:collapse;margin-top:15px;background:rgba(0,0,0,.18);border-radius:18px;overflow:hidden;color:var(--text)}
+    .rank th,.rank td{padding:13px;border-bottom:1px solid rgba(255,255,255,.12);text-align:left}
+    .rank th{color:var(--gold);background:rgba(0,0,0,.25)}
+    .medalha{font-size:24px}.small{font-size:14px;opacity:.82;line-height:1.45}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+    .modalBox{width:min(540px,100%);background:radial-gradient(circle at top,rgba(255,213,106,.18),transparent 36%),linear-gradient(145deg,#123d7a,#061b3a);color:var(--text);border-radius:28px;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.45);border:1px solid var(--border)}
+    .modalBox h2{text-align:center;color:var(--gold)}
+    footer{text-align:center;opacity:.82;margin-top:18px;line-height:1.5}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card">
+      <img class="logo" src="../../assets/img/logo-marciano-maker.png" alt="Logo Marciano Maker" onerror="this.style.display='none'">
+      <h1>Formando Palavras</h1>
+      <p class="sub">Digite palavras usando as sílabas do quadro e entre no ranking do Marciano Maker.</p>
+
+      <div class="topbar">
+        <div class="pill">⏱️ Tempo<br><span id="time">02:00</span></div>
+        <div class="pill">⭐ Pontos<br><span id="score">0</span></div>
+        <div class="pill">✅ Acertos<br><span id="hits">0</span></div>
+        <div class="pill">❌ Erros<br><span id="errors">0</span></div>
+      </div>
+
+      <main class="layout">
+        <section class="panel">
+          <h2>🎮 Desafio das Sílabas</h2>
+          <p class="small">Digite uma palavra possível. Acerto soma pontos. Palavra errada desconta. A mesma palavra não vale duas vezes.</p>
+
+          <div class="inputRow">
+            <input id="wordInput" placeholder="Digite aqui..." autocomplete="off" disabled />
+            <button id="checkBtn" disabled>Validar</button>
+          </div>
+
+          <div class="msg" id="msg">Clique em começar para jogar.</div>
+
+          <div class="actions">
+            <button id="startBtn">▶️ Começar</button>
+            <button class="info" id="restartBtn">🔁 Jogar novamente</button>
+            <button class="danger" id="clearRankBtn">🧹 Limpar ranking local</button>
+          </div>
+
+          <h2 style="margin-top:18px">🔤 Sílabas disponíveis</h2>
+          <div class="syllables" id="syllables"></div>
+        </section>
+
+        <aside class="panel">
+          <h2>🏆 Ranking</h2>
+          <div id="rank"></div>
+
+          <h2 style="margin-top:18px">✅ Palavras encontradas</h2>
+          <div class="foundList" id="foundList"></div>
+
+          <p class="small" style="margin-top:12px">O ranking online é salvo no Google Sheets. O ranking local é apenas deste navegador.</p>
+        </aside>
+      </main>
+    </section>
+
+    <footer>
+      <a class="btnlink" href="../../">⬅ Voltar ao Portal</a><br>
+      Escola Municipal Marciano Maciel da Silva • Projeto Marciano Maker
+    </footer>
+  </div>
+
+  <div class="modal" id="nameModal">
+    <div class="modalBox">
+      <img class="logo" src="../../assets/img/logo-marciano-maker.png" alt="Logo Marciano Maker" onerror="this.style.display='none'">
+      <h2>🚀 Identificação do jogador</h2>
+      <p class="sub">Digite seu nome para registrar no ranking:</p>
+      <input id="playerName" placeholder="Nome do aluno" />
+      <div class="actions"><button id="confirmName">Começar</button></div>
+    </div>
+  </div>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxetMcAK5hcO3kAgXknVbEdFh_IAYSoCNwpf9H7MhTtJPlNBfNvLouJfCFZI7FmsU_swQ/exec";
+const JOGO_ID = "Formando Palavras - Sílabas";
+const STORAGE_KEY = "ranking_formando_palavras_silabas";
+
+const SYLLABLES = [
+  "BA","LO","GO","SA","TO","NE","PO",
+  "CA","TA","JI","LU","PI","DA","FI",
+  "RE","SO","RI","LA","BO","A","DO",
+  "CU","MI","BU","VE","MA","JU","DI",
+  "QUA","TU","CO","XI","VA","NA","PE",
+  "ZI","VI","PA","TE","FA","GA","JO",
+  "E","LI","JA","BI","I","QUE","NI",
+  "VO","FO","NO","RU","U","MO","SI",
+  "XA","TI","O","DE","ME","RO","FE"
+];
+
+const VALID_WORDS = [
+  "BOLA","BOLO","BULE","BALA","BELA","BICO","BIFE","BODE","BOTA","BOTO","BONECA",
+  "CASA","CAMA","CANO","CARA","CADA","CAPA","CAVA","CUBO","COCO","COLA","COPO","COTA","CUECA",
+  "DADO","DEDO","DIA","DICA","DONA","DUPLA",
+  "FACA","FADA","FALA","FAMA","FARO","FITA","FOCA","FOFO","FOGO",
+  "GALO","GATO","GOMA","GOTA",
+  "JACA","JANELA","JOGO","JUBA","JUNHO",
+  "LATA","LAVA","LIMA","LOBO","LONA","LOTO","LUVA",
+  "MALA","MAMA","MATO","MAPA","MESA","MEDO","MICO","MIMO","MOLA","MOTO","MUDA",
+  "NADA","NAVE","NELA","NOME","NOVO",
+  "PATO","PATA","PENA","PIPA","POTE","POVO",
+  "QUATI","QUEDA","QUERO",
+  "REDE","RICO","RIMA","RODA","ROLO","RUA","RUGA",
+  "SALA","SAPO","SINO","SOMA",
+  "TAPA","TATU","TELA","TETO","TOCA","TOMATE","TUBO",
+  "VACA","VAGA","VELA","VIDA","VILA","VIOLA",
+  "XALE","XAROPE",
+  "ZICA"
+];
+
+const GAME_SECONDS = 120;
+const POINT_OK = 10;
+const POINT_BAD = -5;
+
+let player = "";
+let timeLeft = GAME_SECONDS;
+let score = 0;
+let hits = 0;
+let errors = 0;
+let timer = null;
+let running = false;
+let found = new Set();
+
+const $ = id => document.getElementById(id);
+
+function normalizeWord(value){
+  return value.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/Ç/g,"C").replace(/[^A-Z]/g,"");
+}
+
+function canBuildWithSyllables(word){
+  const ordered = [...SYLLABLES].sort((a,b)=>b.length-a.length);
+  const memo = {};
+  function solve(rest){
+    if(rest === "") return true;
+    if(memo[rest] !== undefined) return memo[rest];
+    for(const s of ordered){
+      if(rest.startsWith(s) && solve(rest.slice(s.length))){
+        memo[rest] = true;
+        return true;
+      }
+    }
+    memo[rest] = false;
+    return false;
+  }
+  return solve(word);
+}
+
+function renderSyllables(){
+  $("syllables").innerHTML = SYLLABLES.map(s => `<div class="syll">${s}</div>`).join("");
+}
+
+function renderStats(){
+  const min = String(Math.floor(timeLeft / 60)).padStart(2,"0");
+  const sec = String(timeLeft % 60).padStart(2,"0");
+  $("time").textContent = `${min}:${sec}`;
+  $("score").textContent = score;
+  $("hits").textContent = hits;
+  $("errors").textContent = errors;
+}
+
+function renderFound(){
+  $("foundList").innerHTML = [...found].sort().map(w => `<span class="tag">${w}</span>`).join("");
+}
+
+function getRankLocal(){
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+  catch(e) { return []; }
+}
+
+function saveRankLocal(registro){
+  const rank = getRankLocal();
+  rank.push(registro);
+  rank.sort((a,b)=>Number(b.pontos || 0)-Number(a.pontos || 0));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(rank.slice(0,50)));
+}
+
+function consolidarMelhorPorAluno(lista) {
+  const mapa = {};
+  lista.forEach(item => {
+    const nome = String(item.nome || "").trim();
+    if (!nome) return;
+    const chave = nome.toLowerCase();
+    const pontos = Number(item.pontos || 0);
+    if (!mapa[chave] || pontos > Number(mapa[chave].pontos || 0)) {
+      mapa[chave] = { nome, pontos, data: item.data || "" };
+    }
+  });
+  return Object.values(mapa).sort((a,b)=>Number(b.pontos)-Number(a.pontos)).slice(0,5);
+}
+
+async function getRankOnline(){
+  try {
+    const response = await fetch(SCRIPT_URL + "?jogo=" + encodeURIComponent(JOGO_ID));
+    const dados = await response.json();
+    if (!Array.isArray(dados)) return consolidarMelhorPorAluno(getRankLocal());
+    const filtrado = dados
+      .filter(item => item && (!item.jogo || String(item.jogo).trim().toLowerCase() === JOGO_ID.toLowerCase()))
+      .map(item => ({ nome: item.nome || "-", pontos: Number(item.pontos) || 0, data: item.data || "" }));
+    return consolidarMelhorPorAluno(filtrado.length ? filtrado : getRankLocal());
+  } catch(e) {
+    return consolidarMelhorPorAluno(getRankLocal());
+  }
+}
+
+function medalha(i){
+  if(i === 0) return "🥇";
+  if(i === 1) return "🥈";
+  if(i === 2) return "🥉";
+  return "⭐";
+}
+
+async function renderRank(){
+  $("rank").innerHTML = `<p class="small">Carregando ranking...</p>`;
+  const rank = await getRankOnline();
+
+  $("rank").innerHTML = rank.length
+    ? `<table class="rank">
+        <thead><tr><th></th><th>Aluno</th><th>Pontos</th></tr></thead>
+        <tbody>${rank.map((r,i)=>`<tr><td class="medalha">${medalha(i)}</td><td>${r.nome}</td><td>${Number(r.pontos) || 0}</td></tr>`).join("")}</tbody>
+      </table>`
+    : `<p class="small">Ainda não há ranking para este jogo.</p>`;
+}
+
+function salvarRanking(){
+  if(!player) return;
+  const registro = {
+    nome: player,
+    pontos: score,
+    hits,
+    errors,
+    words: found.size,
+    jogo: JOGO_ID,
+    data: new Date().toLocaleDateString("pt-BR")
+  };
+  saveRankLocal(registro);
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify({
+      nome: player,
+      pontos: score,
+      jogo: JOGO_ID,
+      tempo: GAME_SECONDS - timeLeft,
+      jogadas: found.size
+    })
+  }).catch(() => {});
+}
+
+function startGame(){
+  timeLeft = GAME_SECONDS;
+  score = 0;
+  hits = 0;
+  errors = 0;
+  found = new Set();
+  running = true;
+  $("wordInput").disabled = false;
+  $("checkBtn").disabled = false;
+  $("wordInput").focus();
+  $("msg").className = "msg";
+  $("msg").textContent = "Valendo! Digite uma palavra.";
+  renderStats();
+  renderFound();
+  clearInterval(timer);
+  timer = setInterval(()=>{
+    timeLeft--;
+    renderStats();
+    if(timeLeft <= 0) endGame();
+  },1000);
+}
+
+function endGame(){
+  clearInterval(timer);
+  running = false;
+  $("wordInput").disabled = true;
+  $("checkBtn").disabled = true;
+  $("msg").className = "msg warn";
+  $("msg").textContent = `Fim de jogo! ${player}, você fez ${score} pontos.`;
+  salvarRanking();
+  renderRank();
+}
+
+function checkWord(){
+  if(!running) return;
+  const word = normalizeWord($("wordInput").value);
+  $("wordInput").value = "";
+
+  if(word.length < 2){
+    $("msg").className = "msg bad";
+    $("msg").textContent = "Digite uma palavra maior.";
+    return;
+  }
+
+  if(found.has(word)){
+    $("msg").className = "msg warn";
+    $("msg").textContent = "Essa palavra já foi usada.";
+    return;
+  }
+
+  const isValid = VALID_WORDS.includes(word) && canBuildWithSyllables(word);
+
+  if(isValid){
+    found.add(word);
+    score += POINT_OK;
+    hits++;
+    $("msg").className = "msg ok";
+    $("msg").textContent = `Muito bem! "${word}" valeu +${POINT_OK} pontos.`;
+  } else {
+    score += POINT_BAD;
+    errors++;
+    $("msg").className = "msg bad";
+    $("msg").textContent = `"${word}" não está na lista ou não usa as sílabas do quadro. ${POINT_BAD} pontos.`;
+  }
+
+  renderStats();
+  renderFound();
+  $("wordInput").focus();
+}
+
+function abrirModalNome(){
+  $("nameModal").style.display = "flex";
+  $("playerName").value = player || "";
+  setTimeout(()=>$("playerName").focus(),100);
+}
+
+$("startBtn").addEventListener("click", abrirModalNome);
+
+$("confirmName").addEventListener("click", ()=>{
+  player = $("playerName").value.trim() || "Aluno";
+  $("nameModal").style.display = "none";
+  startGame();
+});
+
+$("restartBtn").addEventListener("click", ()=>{
+  clearInterval(timer);
+  if(player) startGame();
+  else abrirModalNome();
+});
+
+$("checkBtn").addEventListener("click", checkWord);
+
+$("wordInput").addEventListener("keydown", e=>{
+  if(e.key === "Enter") checkWord();
+});
+
+$("playerName").addEventListener("keydown", e=>{
+  if(e.key === "Enter") $("confirmName").click();
+});
+
+$("clearRankBtn").addEventListener("click", ()=>{
+  if(confirm("Deseja apagar apenas o ranking local deste navegador?")){
+    localStorage.removeItem(STORAGE_KEY);
+    renderRank();
+  }
+});
+
+renderSyllables();
+renderStats();
+renderRank();
+renderFound();
+</script>
+</body>
+</html>
